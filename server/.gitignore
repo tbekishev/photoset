@@ -24,5 +24,3 @@
 
 # Typescript
 *.tsbuildinfo
-
-/client/.env
