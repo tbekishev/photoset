@@ -3,7 +3,7 @@ import { Sidebar, UserProfile } from '../components';
 import { HiMenu } from 'react-icons/hi';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { Link, Route, Routes } from 'react-router-dom';
-import logo from '../assets/logo.png'
+import logo from '../assets/logo.png';
 import { userQuery } from '../utils/data';
 import { client } from '../client';
 import Pins from './Pins';
