@@ -1,5 +1,4 @@
-import React from 'react'
-import shareVideo from '../assets/share.mp4';
+import React from 'react';
 import background from '../assets/login_photo.jpg';
 import logo from '../assets/logowhite.png';
 import { GoogleLogin } from '@react-oauth/google';
