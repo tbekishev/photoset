@@ -1,13 +1,36 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { urlFor } from '../client';
+import { client, urlFor } from '../client';
 import { MdDownloadForOffline } from 'react-icons/md';
+import { fetchUser } from '../utils/fetchUser';
+import { v4 as uuidv4 } from 'uuid';
 
-const Pin = ({ pin: {postedBy, image, _id, destination} }) => {
+const Pin = ({ pin: {postedBy, image, _id, destination, save} }) => {
   const [postHovered, setPostHovered] = useState(false);
-  const [savingPost, setSavingPost] = useState(false);
   const navigate = useNavigate();
+  const user = fetchUser();
+  const alreadySaved = !!(save?.filter((item) => item.postedBy._id === user.aud))?.length;
   
+  const savePin = (id) => {
+    if(!alreadySaved) {
+      client
+        .patch(id)
+        .setIfMissing({ save: [] })
+        .insert('after', 'save[-1]', [{
+          _key: uuidv4(),
+          userId: user.aud,
+          postedBy: {
+            _type: 'postedBy',
+            _ref: user.aud
+          }
+        }])
+        .commit()
+        .then(() => {
+          window.location.reload();
+        })
+    }
+  }
+
   return (
     <div className='m-2'>
       <div
@@ -33,6 +56,22 @@ const Pin = ({ pin: {postedBy, image, _id, destination} }) => {
                   <MdDownloadForOffline />
                 </a>
               </div>
+              {alreadySaved ? (
+                <button type='button' className='bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outlined-none'>
+                 {save?.length} Saved
+                </button>
+              ): (
+                <button 
+                    type='button'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      savePin(_id);
+                    }} 
+                    className='bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outlined-none'
+                  >
+                  Save
+                </button>
+              )}
             </div>
           </div>
         )}

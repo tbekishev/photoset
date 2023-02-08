@@ -1,6 +1,5 @@
 import React from 'react';
 import { RiHomeFill } from 'react-icons/ri';
-import { IoIosArrowForward } from 'react-icons/io';
 import logo from '../assets/logo.png';
 import { Link, NavLink } from 'react-router-dom';
 
