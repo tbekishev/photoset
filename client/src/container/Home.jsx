@@ -13,21 +13,22 @@ const Home = () => {
 
   const [toggleSidebar, setToggleSidebar] = useState(false);
   const [user, setUser] = useState(null);
-  const userInfo = fetchUser();
   const scrollRef = useRef(null);
-  
-  useEffect(() => {
-    const query = userQuery(userInfo?.aud);
-    scrollRef.current.scrollTo(0, 0);
-  }, [])
+
+  const userInfo = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : localStorage.clear();
 
   useEffect(() => {
-    const query = userQuery(userInfo?.aud);
-    client.fetch(query)
+    const query = userQuery(userInfo?.sub);
+    client
+      .fetch(query)
       .then((data) => {
         setUser(data[0]);
       })
   }, [])
+
+  useEffect(() => {
+    scrollRef.current.scrollTo(0, 0);
+  })
 
   return (
     <div className='flex bg-gray-50 md:flex-row flex-col h-screen transaction-height duration-75 ease-out'>
