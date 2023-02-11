@@ -14,9 +14,7 @@ const CreatePin = ({ user }) => {
   const [loading, setLoading] = useState(false);
   const [wrongImageType, setWrongImageType] = useState(false);
   const [imageAsset, setImageAsset] = useState(false);
-  const [title, setTitle] = useState();
   const [about, setAbout] = useState();
-  const [destination, setDestination] = useState();
   const [category, setCategory] =useState();
 
   const uploadImage = (e) => {
@@ -38,12 +36,10 @@ const CreatePin = ({ user }) => {
   }
 
   const savePin = () => {
-    if(title && about && destination && imageAsset?._id && category) {
+    if(about && imageAsset?._id && category) {
       const doc = {
         _type: 'pin',
-        title,
         about,
-        destination,
         image: {
           _type: 'image',
           asset: {
@@ -120,13 +116,6 @@ const CreatePin = ({ user }) => {
           </div>
         </div>
         <div className='flex flex-1 flex-col gap-6 lg:pl-5 mt-5 w-full'>
-          <input
-            type='text'
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder='Add your title here'
-            className='outline-none text-2xl sm:text-3xl font-bold border-b-2 border-gray-200 p-2'
-          />
           {user && (
             <div className='flex gap-2 my-2 items-center bg-white rounded-lg'>
               <img
@@ -142,13 +131,6 @@ const CreatePin = ({ user }) => {
             value={about}
             onChange={(e) => setAbout(e.target.value)}
             placeholder='What is your pin about?'
-            className='outline-none text-base sm:text-lg border-b-2 border-gray-200 p-2'
-          />
-          <input
-            type='text'
-            value={destination}
-            onChange={(e) => setDestination(e.target.value)}
-            placeholder='Add a destination link'
             className='outline-none text-base sm:text-lg border-b-2 border-gray-200 p-2'
           />
           <div className='flex flex-col'>

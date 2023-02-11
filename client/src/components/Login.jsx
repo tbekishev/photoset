@@ -18,11 +18,9 @@ const Login = () => {
       _type: 'user',
       userName: name,
       image: picture,
-    }
-        console.log('doc: ', doc) 
-        console.log('decoded: ', decoded) 
+    } 
         client.createIfNotExists(doc)
-      .then(data => {
+      .then(() => {
         navigate('/', { replace: true })
       });
   }

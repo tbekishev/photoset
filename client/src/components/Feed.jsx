@@ -14,6 +14,7 @@ const Feed = () => {
 
     setLoading(true);
     if(categoryId) {
+      setLoading(true);
       const query = searchQuery(categoryId);
       client.fetch(query)
         .then((data) => {
@@ -21,6 +22,7 @@ const Feed = () => {
           setLoading(false);
         })
     } else {
+      setLoading(true);
       client.fetch(feedQuery)
         .then((data) => {
           setPins(data);

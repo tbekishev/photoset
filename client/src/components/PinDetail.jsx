@@ -99,7 +99,7 @@ const PinDetail = ({ user }) => {
           <p className='mt-3'>{pinDetail.about}</p>
         </div>
         <Link 
-          to={`user-profile/${pinDetail.postedBy?._id}`}
+          to={`/user-profile/${pinDetail.postedBy?._id}`}
           className='flex gap-2 mt-5 items-center bg-white rounded-lg'
         >
           <img 
@@ -118,6 +118,10 @@ const PinDetail = ({ user }) => {
               className='flex gap-2 mt-5 items-center bg-white rounded-lg'
               key={i}
             >
+              <Link 
+                to={`/user-profile/${pinDetail.postedBy?._id}`}
+                className='flex gap-2 mt-5 items-center bg-white rounded-lg'
+              >
               <img
                 src={comment.postedBy.image}
                 alt='user-profile'
@@ -127,6 +131,7 @@ const PinDetail = ({ user }) => {
                 <p className='font-bold'>{comment.postedBy.userName}</p>
                 <p>{comment.comment}</p>
               </div>
+              </Link>
             </div>
           ))}
         </div>
