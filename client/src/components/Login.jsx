@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import background from '../assets/login_photo.jpg';
 import logo from '../assets/logowhite.png';
 import { GoogleLogin } from '@react-oauth/google';
@@ -23,7 +23,7 @@ const Login = () => {
       .then(() => {
         navigate('/', { replace: true })
       });
-  }
+  };
 
   return (
     <div className='flex justify-start items-center flex-col h-screen'>

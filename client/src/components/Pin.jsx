@@ -6,8 +6,9 @@ import { AiTwotoneDelete } from 'react-icons/ai';
 import { client, urlFor } from '../client';
 import { fetchUser } from '../utils/fetchUser';
 
-const Pin = ({ pin: { postedBy, image, _id, save } }) => {
+const Pin = ({ pin: { postedBy, image, _id, save }, setChanged }) => {
   const [postHovered, setPostHovered] = useState(false);
+  const [savingPost, setSavingPost] = useState(false);
   const navigate = useNavigate();
 
   const user = fetchUser();
@@ -16,13 +17,15 @@ const Pin = ({ pin: { postedBy, image, _id, save } }) => {
     client
       .delete(id)
       .then(() => {
+        setChanged(true);
       });
   };
 
-  const alreadySaved = !!(save?.filter((item) => item?.postedBy?._id === user?.sub))?.length;
+  let alreadySaved = !!(save?.filter((item) => item?.postedBy?._id === user?.sub))?.length;
 
   const savePin = (id) => {
     if (!alreadySaved) {
+      setSavingPost(true);
       client
         .patch(id)
         .setIfMissing({ save: [] })
@@ -35,8 +38,9 @@ const Pin = ({ pin: { postedBy, image, _id, save } }) => {
           },
         }])
         .commit()
-        .then(() => {
-          window.location.reload();
+        .then((data) => {
+          setChanged(true);
+          setSavingPost(false);
         });
     }
   };
@@ -49,7 +53,7 @@ const Pin = ({ pin: { postedBy, image, _id, save } }) => {
         onClick={() => navigate(`/pin-detail/${_id}`)}
         className=" relative cursor-zoom-in w-auto hover:shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out"
       >
-          {image && (
+          {image && !_id.includes('draft') && (
         <img className="rounded-lg w-full " src={(urlFor(image).width(250).url())} alt="user-post" /> )}
         {postHovered && (
           <div
@@ -81,7 +85,7 @@ const Pin = ({ pin: { postedBy, image, _id, save } }) => {
                   type="button"
                   className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
                 >
-                  Save
+                  {savingPost ? 'Saving' : 'Save'}
                 </button>
               )}
             </div>
@@ -104,14 +108,16 @@ const Pin = ({ pin: { postedBy, image, _id, save } }) => {
           </div>
         )}
       </div>
-      <Link to={`/user-profile/${postedBy?._id}`} className="flex gap-2 mt-2 items-center">
+      {!_id.includes('draft') && (
+        <Link to={`/user-profile/${postedBy?._id}`} className="flex gap-2 mt-2 items-center">
         <img
           className="w-8 h-8 rounded-full object-cover"
           src={postedBy?.image}
           alt="user-profile"
-        />
+          />
         <p className="font-semibold capitalize">{postedBy?.userName}</p>
-      </Link>
+        </Link>
+      )}
     </div>
   );
 };
