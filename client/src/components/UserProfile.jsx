@@ -16,6 +16,7 @@ const UserProfile = () => {
   const [text, setText] = useState('Created');
   const [activeBtn, setActiveBtn] = useState('created');
   const [pins, setPins] = useState();
+  const [changed, setChanged] =useState(true);
 
   const { userId } = useParams();
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ const UserProfile = () => {
       const createdPinsQuery = userCreatedPinsQuery(userId);
 
       client.fetch(createdPinsQuery).then((data) => {
+        setChanged(false);
         setPins(data);
       });
     } else {
@@ -45,7 +47,7 @@ const UserProfile = () => {
         setPins(data);
       });
     }
-  }, [text, userId]);
+  }, [text, userId, changed]);
 
   const logout = () => {
     localStorage.clear();
@@ -109,7 +111,7 @@ const UserProfile = () => {
           </div>
           {pins?.length ? (
             <div className='px-2'>
-              <MasonryLayout pins={pins} />
+              <MasonryLayout pins={pins} setChanged={setChanged} />
             </div>
           ) : (
             <div className='flex justify-center font-bold items-center w-full text-xl mt-2'>
